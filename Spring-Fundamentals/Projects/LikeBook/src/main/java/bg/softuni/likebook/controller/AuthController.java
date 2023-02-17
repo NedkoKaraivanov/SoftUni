@@ -1,5 +1,6 @@
 package bg.softuni.likebook.controller;
 
+import bg.softuni.likebook.model.dto.LoginDTO;
 import bg.softuni.likebook.model.dto.RegisterDTO;
 import bg.softuni.likebook.service.AuthService;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,11 @@ public class AuthController {
         return new RegisterDTO();
     }
 
+    @ModelAttribute("loginDTO")
+    public LoginDTO initLoginDTO() {
+        return new LoginDTO();
+    }
+
     @GetMapping("/register")
         public String register() {
 
@@ -45,5 +51,33 @@ public class AuthController {
 
         return "redirect:/";
 
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@Valid LoginDTO loginDTO,
+                        BindingResult bindingResult,
+                        RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+
+            redirectAttributes.addFlashAttribute("loginDTO", loginDTO);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.loginDTO", bindingResult);
+
+            return "redirect:/login";
+        }
+
+        if (!this.authService.login(loginDTO)) {
+
+            redirectAttributes.addFlashAttribute("loginDTO", loginDTO);
+            redirectAttributes.addFlashAttribute("badCredentials", true);
+            return "redirect:/login";
+        }
+
+        return "redirect:/";
     }
 }

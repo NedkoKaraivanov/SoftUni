@@ -1,5 +1,6 @@
 package bg.softuni.likebook.service;
 
+import bg.softuni.likebook.model.dto.LoginDTO;
 import bg.softuni.likebook.model.dto.RegisterDTO;
 import bg.softuni.likebook.model.entity.User;
 import bg.softuni.likebook.repository.UserRepository;
@@ -47,5 +48,31 @@ public class AuthService {
 
         this.userRepository.save(user);
         return true;
+    }
+
+    public boolean login(LoginDTO loginDTO) {
+
+        Optional<User> byUsername = this.userRepository.findByUsername(loginDTO.getUsername());
+
+        if (byUsername.isEmpty()) {
+            return false;
+        }
+
+        String rawPassword = loginDTO.getPassword();
+        String encodedPassword = byUsername.get().getPassword();
+
+        boolean isPasswordMatching = this.passwordEncoder.matches(rawPassword, encodedPassword);
+
+        if (!isPasswordMatching) {
+            return false;
+        }
+
+        this.userSession.login(byUsername.get());
+
+        return true;
+    }
+
+    public boolean isLoggedIn() {
+        return this.userSession.getId() > 0;
     }
 }
