@@ -2,7 +2,9 @@ package bg.softuni.likebook.model.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -14,12 +16,15 @@ public class Post extends BaseEntity {
     @ManyToOne(optional = false)
     private User creator;
 
-    @ManyToMany
-    @Column(name = "user_likes")
-    private List<User> userLikes = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<User> userLikes;
 
     @ManyToOne
     private Mood mood;
+
+    public Post() {
+        this.userLikes = new HashSet<>();
+    }
 
     public String getContent() {
         return content;
@@ -39,11 +44,11 @@ public class Post extends BaseEntity {
         return this;
     }
 
-    public List<User> getUserLikes() {
+    public Set<User> getUserLikes() {
         return userLikes;
     }
 
-    public Post setUserLikes(List<User> userLikes) {
+    public Post setUserLikes(Set<User> userLikes) {
         this.userLikes = userLikes;
         return this;
     }
