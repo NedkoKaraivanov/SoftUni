@@ -82,8 +82,26 @@ public class PostService {
 
         Set<User> userLikes = post.getUserLikes();
 
-        userLikes.add(user);
+        boolean isMatch = false;
 
-        this.postRepository.save(post);
+        User userWhoLiked = null;
+
+        for (User userLike : userLikes) {
+            if (Objects.equals(userLike.getId(), user.getId())) {
+                userWhoLiked = userLike;
+                isMatch = true;
+                break;
+            }
+        }
+
+        if (!isMatch) {
+            userLikes.add(user);
+            this.postRepository.save(post);
+            System.out.println("user liked");
+        } else {
+            userLikes.remove(userWhoLiked);
+            this.postRepository.save(post);
+            System.out.println("user removed like");
+        }
     }
 }
