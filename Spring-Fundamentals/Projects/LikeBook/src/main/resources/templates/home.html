@@ -35,8 +35,8 @@
                             <li class="list-group-item">
                                 <table>
                                     <tr>
-                                        <td style="width: 15%" th:text="${otherPost.creator}"><a> {username}: </a></td>
-                                        <td>
+                                        <td style="width: 15%" th:text="|${otherPost.creator}: |"><a> {username}: </a></td>
+                                        <td style="text-align:center">
                                             <a th:text="${otherPost.content}">{content}</a>
                                         </td>
                                     </tr>

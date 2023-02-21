@@ -12,9 +12,6 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    List<Post> getAllById(Long id);
-
-    List<Post> findAllByIdIsNotLike(Long id);
 
     @Query(value = "SELECT p from Post as p where p.creator.id not in :id ")
     List<Post> findAllByCreatorIdIsNot(Long id);

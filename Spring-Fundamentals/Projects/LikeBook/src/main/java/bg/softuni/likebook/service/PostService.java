@@ -10,7 +10,6 @@ import bg.softuni.likebook.repository.MoodRepository;
 import bg.softuni.likebook.repository.PostRepository;
 import bg.softuni.likebook.repository.UserRepository;
 import bg.softuni.likebook.session.LoggedUser;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -108,5 +107,38 @@ public class PostService {
     public void remove(Long id) {
 
         this.postRepository.deleteById(id);
+    }
+
+    public void addTestPosts() {
+
+        Post adminPost = new Post()
+                .setCreator(this.userRepository.findById(Long.parseLong("1")).orElse(null))
+                .setMood(this.moodRepository.findMoodByMoodName(MoodEnum.HAPPY))
+                .setContent("Today i have got a promotion!");
+        this.postRepository.save(adminPost);
+
+        Post adminPost2 = new Post()
+                .setCreator(this.userRepository.findById(Long.parseLong("1")).orElse(null))
+                .setMood(this.moodRepository.findMoodByMoodName(MoodEnum.SAD))
+                .setContent("My car broke :(");
+        this.postRepository.save(adminPost2);
+
+        Post testPost = new Post()
+                .setCreator(this.userRepository.findById(Long.parseLong("2")).orElse(null))
+                .setMood(this.moodRepository.findMoodByMoodName(MoodEnum.INSPIRED))
+                .setContent("Started Learning Java");
+        this.postRepository.save(testPost);
+
+        Post testPost1 = new Post()
+                .setCreator(this.userRepository.findById(Long.parseLong("2")).orElse(null))
+                .setMood(this.moodRepository.findMoodByMoodName(MoodEnum.INSPIRED))
+                .setContent("I am going to quit smoking");
+        this.postRepository.save(testPost1);
+
+        Post testPost2 = new Post()
+                .setCreator(this.userRepository.findById(Long.parseLong("2")).orElse(null))
+                .setMood(this.moodRepository.findMoodByMoodName(MoodEnum.HAPPY))
+                .setContent("She said 'Yes' :)))");
+        this.postRepository.save(testPost2);
     }
 }
