@@ -12,14 +12,14 @@
                 <h6 class="mySticky bg-gray text-dark  mb-0 mt-0" th:text="|Username: ${username}|">Username: {username}</h6>
                 <div class="bg-dark rounded m-auto" style="height: 68.5vh; overflow: auto">
                     <table class="table table-striped table-dark">
-                        <tr th:each="post : ${postsByLoggedUser}" th:object="${post}">
+                        <tr th:each="myPost : ${postsByLoggedUser}" th:object="${myPost}">
                             <td class="bg-info" scope="row" style="width: 5%">
                                 <img class="mr-2 " src="/img/post-bubble.png" alt="PostBubble" width="30px" height="30px">
                             </td>
                             <td style="width: 5%" class="bg-info" th:text="*{mood}">{mood}</td>
-                            <td class="bg-primary" style="width: 15%" th:text="|*{countLikes} likes|">{numberOfLikes) likes</td>
+                            <td class="bg-primary" style="width: 15%" th:text="|${myPost.countLikes} ${myPost.countLikes <= 1 ?'like' : 'likes'}|">{numberOfLikes) likes</td>
                             <td th:text="*{content}">{content}</td>
-                            <td style="width: 15%"><a class="btn-danger btn" href="/">Remove</a></td>
+                            <td style="width: 15%"><a class="btn-danger btn" th:href="@{/posts/remove/{id}(id = ${myPost.id})}">Remove</a></td>
                         </tr>
                     </table>
                 </div>

@@ -104,4 +104,9 @@ public class PostService {
             System.out.println("user removed like");
         }
     }
+
+    public void remove(Long id) {
+
+        this.postRepository.deleteById(id);
+    }
 }

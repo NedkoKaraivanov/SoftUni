@@ -55,18 +55,4 @@ public class HomeController {
 
         return "home";
     }
-
-    @GetMapping("posts/like/{id}")
-    public String likePost(@PathVariable Long id) {
-
-        if (!this.authService.isLoggedIn()) {
-            return "redirect:/";
-        }
-
-        this.postService.likePost(id);
-
-        return "redirect:/home";
-    }
-
-
 }

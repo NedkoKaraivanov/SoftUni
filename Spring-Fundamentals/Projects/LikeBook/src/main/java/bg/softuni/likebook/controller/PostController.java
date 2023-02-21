@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -68,4 +69,28 @@ public class PostController {
 
         return "redirect:/home";
     }
+
+    @GetMapping("/posts/like/{id}")
+    public String likePost(@PathVariable Long id) {
+
+        if (!this.authService.isLoggedIn()) {
+            return "redirect:/";
+        }
+
+        this.postService.likePost(id);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/posts/remove/{id}")
+    public String removePost(@PathVariable Long id) {
+        if (!this.authService.isLoggedIn()) {
+            return "redirect:/";
+        }
+
+        this.postService.remove(id);
+
+        return "redirect:/";
+    }
+
 }
