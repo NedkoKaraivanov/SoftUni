@@ -6,15 +6,10 @@ import java.util.Set;
 public class PostViewDTO {
 
     private Long id;
-
     private String creator;
-
     private String mood;
-
     private int countLikes;
-
     private String content;
-
 
     public Long getId() {
         return id;

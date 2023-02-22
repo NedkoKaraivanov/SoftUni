@@ -6,8 +6,6 @@ import javax.validation.constraints.Size;
 
 public class RegisterDTO {
 
-    //username, email, password, confirmPassword
-
     @NotBlank
     @Size(min = 3, max = 20)
     private String username;

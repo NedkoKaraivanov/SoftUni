@@ -6,12 +6,14 @@ import bg.softuni.likebook.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+
+
 @Component
 public class EntityInit implements CommandLineRunner {
 
     private final MoodService moodService;
-    private UserService userService;
-    private PostService postService;
+    private final UserService userService;
+    private final PostService postService;
 
     public EntityInit(MoodService moodService, UserService userService, PostService postService) {
         this.moodService = moodService;
