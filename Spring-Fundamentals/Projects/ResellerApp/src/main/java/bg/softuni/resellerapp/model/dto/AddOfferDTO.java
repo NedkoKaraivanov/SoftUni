@@ -1,5 +1,7 @@
 package bg.softuni.resellerapp.model.dto;
 
+import bg.softuni.resellerapp.model.enums.ConditionEnum;
+
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 

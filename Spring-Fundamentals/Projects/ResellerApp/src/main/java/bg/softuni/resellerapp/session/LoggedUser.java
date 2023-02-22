@@ -14,7 +14,7 @@ public class LoggedUser {
 
     public void login(User user) {
         this.id = user.getId();
-        this.username = getUsername();
+        this.username = user.getUsername();
     }
 
     public void logout() {

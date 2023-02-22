@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
 
-
-//    List<Offer> findAllByUserIdNotLike(Long id);
+    Set<Offer> findAllByCreator_IdNot(Long id);
 }

@@ -4,11 +4,23 @@ import java.math.BigDecimal;
 
 public class OfferViewDTO {
 
+    private Long id;
     private String description;
 
     private BigDecimal price;
 
     private String condition;
+
+    private String creatorUsername;
+
+    public Long getId() {
+        return id;
+    }
+
+    public OfferViewDTO setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public String getDescription() {
         return description;
@@ -34,6 +46,15 @@ public class OfferViewDTO {
 
     public OfferViewDTO setCondition(String condition) {
         this.condition = condition;
+        return this;
+    }
+
+    public String getCreatorUsername() {
+        return creatorUsername;
+    }
+
+    public OfferViewDTO setCreatorUsername(String creatorUsername) {
+        this.creatorUsername = creatorUsername;
         return this;
     }
 }

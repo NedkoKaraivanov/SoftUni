@@ -48,4 +48,13 @@ public class Offer extends BaseEntity {
         this.condition = condition;
         return this;
     }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public Offer setCreator(User creator) {
+        this.creator = creator;
+        return this;
+    }
 }

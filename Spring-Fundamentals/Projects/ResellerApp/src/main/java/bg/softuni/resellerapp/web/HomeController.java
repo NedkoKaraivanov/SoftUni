@@ -8,7 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
+
+import java.util.Set;
 
 @Controller
 public class HomeController {
@@ -43,10 +44,14 @@ public class HomeController {
 
         String username = this.userService.findUsername();
         model.addAttribute("username", username);
-        List<OfferViewDTO> offersFromLoggedUser = this.offerService.offersFromLoggedUser();
+
+        Set<OfferViewDTO> offersFromLoggedUser = this.offerService.offersFromLoggedUser();
         model.addAttribute("offersFromLoggedUser", offersFromLoggedUser);
 
-//        List<OfferViewDTO> offersFromOtherUsers = this.offerService.offersFromOtherUsers();
+        Set<OfferViewDTO> offersFromOtherUsers = this.offerService.offersFromOtherUsers();
+        model.addAttribute("offersFromOtherUsers", offersFromOtherUsers);
+        model.addAttribute("countOtherOffers", offersFromOtherUsers.size());
+
 
         return "home";
     }

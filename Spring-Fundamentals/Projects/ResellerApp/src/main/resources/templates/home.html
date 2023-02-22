@@ -51,8 +51,9 @@
 
             <div class="col-6 mt-1 mb-1">
                 <h3 class="mySticky bg-gray text-dark  mb-0 mt-2">All Other Offers</h3>
-                <h6 class="mySticky bg-gray text-dark  mb-0 mt-0">{totalOffers}</h6>
-                <div class="bg-dark rounded m-auto" style="height: 67vh; overflow: auto">
+                <h6 class="mySticky bg-gray text-dark  mb-0 mt-0" th:text="|${countOtherOffers}|">{totalOffers}</h6>
+                <div class="bg-dark rounded m-auto" style="height: 67vh; overflow: auto"
+                     th:each="otherOffer : ${offersFromOtherUsers}" th:object="${otherOffer}">
                     <div>
                         <div>
                             <br>
@@ -61,10 +62,10 @@
                                     <table>
                                         <tr>
                                             <td style="width: 35%">
-                                                <a>{sellersUsername} sells:</a>
+                                                <a th:text="|${otherOffer.creatorUsername} sells:|">{sellersUsername} sells:</a>
                                             </td>
                                             <td>
-                                                <a>{offerDescription}</a>
+                                                <a th:text="|*{description}|" >{offerDescription}</a>
                                             </td>
                                         </tr>
                                     </table>
@@ -73,10 +74,10 @@
                                     <table>
                                         <tr>
                                             <td style="width: 40%">
-                                                <a>Condition: {offerCondition}</a>
+                                                <a th:text="|Condition *{condition}|">Condition: {offerCondition}</a>
                                             </td>
                                             <td class="text-primary" style="width: 40%">
-                                                <a>Price: {offerPrice} €</a>
+                                                <a th:text="|Price: *{price}|">Price: {offerPrice} €</a>
                                             </td>
                                             <td>
                                                 <a class="ml-3 text-danger" href="/">

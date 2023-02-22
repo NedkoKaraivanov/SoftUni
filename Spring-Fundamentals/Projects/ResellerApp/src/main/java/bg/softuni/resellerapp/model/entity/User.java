@@ -2,7 +2,9 @@ package bg.softuni.resellerapp.model.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -18,14 +20,14 @@ public class User extends BaseEntity {
     private String email;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "creator")
-    private List<Offer> offers;
+    private Set<Offer> offers;
 
-    @OneToMany()
-    private List<Offer> boughtOffers;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Offer> boughtOffers;
 
     public User() {
-        this.offers = new ArrayList<>();
-        this.boughtOffers = new ArrayList<>();
+        this.offers = new HashSet<>();
+        this.boughtOffers = new HashSet<>();
     }
 
     public String getUsername() {
@@ -55,21 +57,21 @@ public class User extends BaseEntity {
         return this;
     }
 
-    public List<Offer> getOffers() {
+    public Set<Offer> getOffers() {
         return offers;
     }
 
-    public User setOffers(List<Offer> offers) {
+    public User setOffers(Set<Offer> offers) {
         this.offers = offers;
         return this;
     }
 
-    public List<Offer> getBoughtOffers() {
+    public Set<Offer> getBoughtOffers() {
         return boughtOffers;
     }
 
-    public User setBoughtOffers(List<Offer> boughtOOffers) {
-        this.boughtOffers = boughtOOffers;
+    public User setBoughtOffers(Set<Offer> boughtOffers) {
+        this.boughtOffers = boughtOffers;
         return this;
     }
 }

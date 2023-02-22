@@ -1,7 +1,6 @@
 package bg.softuni.resellerapp.service;
 
 import bg.softuni.resellerapp.model.dto.AddOfferDTO;
-import bg.softuni.resellerapp.model.entity.Condition;
 import bg.softuni.resellerapp.model.entity.Offer;
 import bg.softuni.resellerapp.model.entity.User;
 import bg.softuni.resellerapp.model.enums.ConditionEnum;
@@ -13,8 +12,7 @@ import bg.softuni.resellerapp.session.LoggedUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,25 +23,21 @@ public class OfferService {
     private final UserRepository userRepository;
     private final LoggedUser userSession;
     private final ConditionRepository conditionRepository;
-    private final ModelMapper modelMapper;
 
     public OfferService(OfferRepository offerRepository, UserRepository userRepository, LoggedUser userSession, ConditionRepository conditionRepository, ModelMapper modelMapper) {
         this.offerRepository = offerRepository;
         this.userRepository = userRepository;
         this.userSession = userSession;
         this.conditionRepository = conditionRepository;
-        this.modelMapper = modelMapper;
     }
 
 
     public void addOffer(AddOfferDTO addOfferDTO) {
         Offer offer = new Offer()
                 .setDescription(addOfferDTO.getDescription())
-                .setPrice(addOfferDTO.getPrice());
-
-        Condition firstByConditionName = this.conditionRepository.findFirstByConditionName(ConditionEnum.valueOf(addOfferDTO.getCondition()));
-
-        offer.setCondition(firstByConditionName);
+                .setPrice(addOfferDTO.getPrice())
+                .setCondition(this.conditionRepository.findByConditionName(ConditionEnum.valueOf(addOfferDTO.getCondition())))
+                .setCreator(this.userRepository.findById(userSession.getId()).get());
 
         this.offerRepository.save(offer);
 
@@ -52,29 +46,30 @@ public class OfferService {
         this.userRepository.save(user);
     }
 
-    public List<OfferViewDTO> offersFromLoggedUser() {
+    public Set<OfferViewDTO> offersFromLoggedUser() {
 
-        List<OfferViewDTO> offerList = new ArrayList<>();
-
-        List<Offer> userOffers = this.userRepository.findById(userSession.getId())
-                .get().getOffers();
-
-        for (Offer userOffer : userOffers) {
-            OfferViewDTO offerViewDTO = new OfferViewDTO()
-                    .setCondition(userOffer.getCondition().getConditionName().name())
-                            .setDescription(userOffer.getDescription())
-                                    .setPrice(userOffer.getPrice());
-            offerList.add(offerViewDTO);
-        }
-
-        return offerList;
+        return this.userRepository.findById(userSession.getId())
+                .get().getOffers()
+                .stream()
+                .map(userOffer -> new OfferViewDTO()
+                        .setId(userOffer.getId())
+                        .setCreatorUsername(userSession.getUsername())
+                        .setPrice(userOffer.getPrice())
+                        .setCondition(userOffer.getCondition().getConditionName().name())
+                        .setDescription(userOffer.getDescription()))
+                .collect(Collectors.toSet());
     }
 
-//    public List<OfferViewDTO> offersFromOtherUsers() {
-//
-//        List<OfferViewDTO> offerList = new ArrayList<>();
-//
-//        List<Offer> userOffers = this.offerRepository.findAllByUserIdNotLike();
-//        return null;
-//    }
+    public Set<OfferViewDTO> offersFromOtherUsers() {
+
+        return this.offerRepository.findAllByCreator_IdNot(userSession.getId())
+                .stream()
+                .map(offer -> new OfferViewDTO()
+                        .setId(offer.getId())
+                        .setCreatorUsername(offer.getCreator().getUsername())
+                        .setPrice(offer.getPrice())
+                        .setCondition(offer.getCondition().getConditionName().name())
+                        .setDescription(offer.getDescription()))
+                .collect(Collectors.toSet());
+    }
 }

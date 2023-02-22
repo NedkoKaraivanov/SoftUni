@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConditionRepository extends JpaRepository<Condition, Long> {
 
-    Condition findFirstByConditionName(ConditionEnum conditionName);
+    Condition findByConditionName(ConditionEnum conditionName);
 }
