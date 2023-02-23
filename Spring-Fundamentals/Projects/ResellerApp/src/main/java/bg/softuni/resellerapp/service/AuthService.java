@@ -6,6 +6,7 @@ import bg.softuni.resellerapp.model.entity.User;
 import bg.softuni.resellerapp.repository.UserRepository;
 import bg.softuni.resellerapp.session.LoggedUser;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,12 +16,14 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
     private final LoggedUser userSession;
 
     private final ModelMapper modelMapper;
 
-    public AuthService(UserRepository userRepository, LoggedUser userSession, ModelMapper modelMapper) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, LoggedUser userSession, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.userSession = userSession;
         this.modelMapper = modelMapper;
     }
@@ -41,7 +44,10 @@ public class AuthService {
             return false;
         }
 
-        User user = this.modelMapper.map(registerDTO, User.class);
+        User user = new User()
+                .setUsername(registerDTO.getUsername())
+                .setEmail(registerDTO.getEmail())
+                .setPassword(this.passwordEncoder.encode(registerDTO.getPassword()));
         this.userRepository.save(user);
 
         return true;
@@ -56,9 +62,19 @@ public class AuthService {
     }
 
     public boolean login(LoginDTO loginDTO) {
-        Optional<User> optionalUser = this.userRepository.findByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
+
+        Optional<User> optionalUser = this.userRepository.findByUsername(loginDTO.getUsername());
 
         if (optionalUser.isEmpty()) {
+            return false;
+        }
+
+        String rawPassword = loginDTO.getPassword();
+        String encodedPassword = optionalUser.get().getPassword();
+
+        boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
+
+        if (!matches) {
             return false;
         }
 
