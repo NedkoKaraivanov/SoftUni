@@ -12,6 +12,9 @@ import bg.softuni.resellerapp.session.LoggedUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -98,5 +101,43 @@ public class OfferService {
     public void removeOffer(Long id) {
 
         this.offerRepository.deleteById(id);
+    }
+
+    public void initOffers() {
+        User user1 = this.userRepository.findById(1L).orElse(null);
+        User user2 = this.userRepository.findById(2L).orElse(null);
+
+        List<Offer> testOffers = new ArrayList<>();
+
+        Offer offer1 = new Offer()
+                .setCreator(user1)
+                .setDescription("Iphone X")
+                .setCondition(this.conditionRepository.findByConditionName(ConditionEnum.EXCELLENT))
+                .setPrice(BigDecimal.valueOf(800));
+
+        Offer offer2 = new Offer()
+                .setCreator(user1)
+                .setDescription("Bmw 330xd")
+                .setCondition(this.conditionRepository.findByConditionName(ConditionEnum.GOOD))
+                .setPrice(BigDecimal.valueOf(13000));
+
+        Offer offer3 = new Offer()
+                .setCreator(user2)
+                .setDescription("Logitech Keyboard")
+                .setCondition(this.conditionRepository.findByConditionName(ConditionEnum.ACCEPTABLE))
+                .setPrice(BigDecimal.valueOf(70));
+
+        Offer offer4 = new Offer()
+                .setCreator(user2)
+                .setDescription("Yamaha R1")
+                .setCondition(this.conditionRepository.findByConditionName(ConditionEnum.EXCELLENT))
+                .setPrice(BigDecimal.valueOf(8000));
+
+        testOffers.add(offer1);
+        testOffers.add(offer2);
+        testOffers.add(offer3);
+        testOffers.add(offer4);
+
+        this.offerRepository.saveAllAndFlush(testOffers);
     }
 }
