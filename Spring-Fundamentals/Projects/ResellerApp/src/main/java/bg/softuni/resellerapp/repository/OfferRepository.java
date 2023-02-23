@@ -11,5 +11,5 @@ import java.util.Set;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
 
-    Set<Offer> findAllByCreator_IdNot(Long id);
+    Set<Offer> findAllByCreator_IdNotAndBuyerIsNull(Long id);
 }

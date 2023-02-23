@@ -1,9 +1,6 @@
 package bg.softuni.resellerapp.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -21,6 +18,9 @@ public class Offer extends BaseEntity {
 
     @ManyToOne
     private User creator;
+
+    @ManyToOne
+    private User buyer;
 
     public String getDescription() {
         return description;
@@ -55,6 +55,15 @@ public class Offer extends BaseEntity {
 
     public Offer setCreator(User creator) {
         this.creator = creator;
+        return this;
+    }
+
+    public User getBuyer() {
+        return buyer;
+    }
+
+    public Offer setBuyer(User buyer) {
+        this.buyer = buyer;
         return this;
     }
 }

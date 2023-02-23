@@ -11,7 +11,9 @@ import bg.softuni.resellerapp.repository.UserRepository;
 import bg.softuni.resellerapp.session.LoggedUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,9 +43,6 @@ public class OfferService {
 
         this.offerRepository.save(offer);
 
-        User user = this.userRepository.findById(this.userSession.getId()).get();
-        user.getOffers().add(offer);
-        this.userRepository.save(user);
     }
 
     public Set<OfferViewDTO> offersFromLoggedUser() {
@@ -62,7 +61,7 @@ public class OfferService {
 
     public Set<OfferViewDTO> offersFromOtherUsers() {
 
-        return this.offerRepository.findAllByCreator_IdNot(userSession.getId())
+        return this.offerRepository.findAllByCreator_IdNotAndBuyerIsNull(userSession.getId())
                 .stream()
                 .map(offer -> new OfferViewDTO()
                         .setId(offer.getId())
@@ -71,5 +70,30 @@ public class OfferService {
                         .setCondition(offer.getCondition().getConditionName().name())
                         .setDescription(offer.getDescription()))
                 .collect(Collectors.toSet());
+    }
+
+    public Set<OfferViewDTO> boughtOffers() {
+
+        return this.userRepository.findById(userSession.getId())
+                .get().getBoughtOffers()
+                .stream()
+                .map(offer -> new OfferViewDTO()
+                        .setId(offer.getId())
+                        .setCreatorUsername(offer.getCreator().getUsername())
+                        .setPrice(offer.getPrice())
+                        .setCondition(offer.getCondition().getConditionName().name())
+                        .setDescription(offer.getDescription()))
+                .collect(Collectors.toSet());
+    }
+
+    public void buyOffer(Long id) {
+
+        Offer offerById = this.offerRepository.findById(id).get();
+
+        User user = this.userRepository.findById(userSession.getId()).get();
+
+        offerById.setBuyer(user);
+
+        this.offerRepository.save(offerById);
     }
 }

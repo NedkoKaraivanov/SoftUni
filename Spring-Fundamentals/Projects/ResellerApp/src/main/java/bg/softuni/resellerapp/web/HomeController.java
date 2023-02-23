@@ -52,6 +52,9 @@ public class HomeController {
         model.addAttribute("offersFromOtherUsers", offersFromOtherUsers);
         model.addAttribute("countOtherOffers", offersFromOtherUsers.size());
 
+        Set<OfferViewDTO> boughtOffers = this.offerService.boughtOffers();
+        model.addAttribute("boughtOffers", boughtOffers);
+
 
         return "home";
     }
