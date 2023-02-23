@@ -4,16 +4,14 @@ import bg.softuni.resellerapp.model.dto.AddOfferDTO;
 import bg.softuni.resellerapp.model.entity.Offer;
 import bg.softuni.resellerapp.model.entity.User;
 import bg.softuni.resellerapp.model.enums.ConditionEnum;
-import bg.softuni.resellerapp.model.viewDTO.OfferViewDTO;
+import bg.softuni.resellerapp.model.dto.viewDTO.OfferViewDTO;
 import bg.softuni.resellerapp.repository.ConditionRepository;
 import bg.softuni.resellerapp.repository.OfferRepository;
 import bg.softuni.resellerapp.repository.UserRepository;
 import bg.softuni.resellerapp.session.LoggedUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -95,5 +93,10 @@ public class OfferService {
         offerById.setBuyer(user);
 
         this.offerRepository.save(offerById);
+    }
+
+    public void removeOffer(Long id) {
+
+        this.offerRepository.deleteById(id);
     }
 }

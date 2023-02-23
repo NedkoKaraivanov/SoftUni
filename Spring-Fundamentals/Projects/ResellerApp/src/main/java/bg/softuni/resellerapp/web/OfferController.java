@@ -72,4 +72,16 @@ public class OfferController {
 
         return "redirect:/home";
     }
+
+    @GetMapping("/offers/remove/{id}")
+    public String removeOffer(@PathVariable Long id) {
+
+        if (!this.authService.isLoggedIn()) {
+            return "redirect:/";
+        }
+
+        this.offerService.removeOffer(id);
+
+        return "redirect:/home";
+    }
 }

@@ -1,6 +1,6 @@
 package bg.softuni.resellerapp.web;
 
-import bg.softuni.resellerapp.model.viewDTO.OfferViewDTO;
+import bg.softuni.resellerapp.model.dto.viewDTO.OfferViewDTO;
 import bg.softuni.resellerapp.service.AuthService;
 import bg.softuni.resellerapp.service.OfferService;
 import bg.softuni.resellerapp.service.UserService;

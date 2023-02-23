@@ -21,7 +21,7 @@
                                 <td style="width: 5%" class="bg-info" th:text="|*{condition}|">{condition}</td>
                                 <td class="bg-primary" style="width: 15%" th:text="|*{price}|">{price} €</td>
                                 <td th:text="|*{description}|">{description}</td>
-                                <td style="width: 15%"><a class="btn-danger btn" href="/">Remove</a>
+                                <td style="width: 15%"><a class="btn-danger btn" th:href="@{/offers/remove/{id}(id = *{id})}">Remove</a>
                                 </td>
                             </tr>
                         </table>
