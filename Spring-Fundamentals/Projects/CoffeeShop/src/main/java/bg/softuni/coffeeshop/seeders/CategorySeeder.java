@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Component
+@Component
 public class CategorySeeder implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
