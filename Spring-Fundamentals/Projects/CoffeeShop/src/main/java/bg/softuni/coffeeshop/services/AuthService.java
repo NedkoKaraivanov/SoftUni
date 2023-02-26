@@ -6,6 +6,7 @@ import bg.softuni.coffeeshop.models.dtos.RegisterDTO;
 import bg.softuni.coffeeshop.repositories.UserRepository;
 import bg.softuni.coffeeshop.session.LoggedUser;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,25 +14,36 @@ import java.util.Optional;
 @Service
 public class AuthService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private ModelMapper modelMapper;
-    private LoggedUser userSession;
+    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
+    private final LoggedUser userSession;
 
-    public AuthService(UserRepository userRepository, ModelMapper modelMapper, LoggedUser userSession) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, LoggedUser userSession) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.userSession = userSession;
     }
 
     public boolean login(LoginDTO loginDTO) {
-        Optional<User> user = this.userRepository.findByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
+        Optional<User> optionalUser = this.userRepository.findByUsername(loginDTO.getUsername());
 
-        if (user.isEmpty()) {
+        if (optionalUser.isEmpty()) {
             return false;
         }
 
-        this.userSession.login(user.get());
+        String rawPassword = loginDTO.getPassword();
+        String encodedPassword = optionalUser.get().getPassword();
+
+        boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
+
+        if (!matches) {
+            return false;
+        }
+
+        this.userSession.login(optionalUser.get());
 
         return true;
     }
@@ -52,8 +64,8 @@ public class AuthService {
             return false;
         }
 
-        //User user = new User();
         User user = this.modelMapper.map(registerDTO, User.class);
+        user.setPassword(this.passwordEncoder.encode(registerDTO.getPassword()));
 
         this.userRepository.save(user);
 
